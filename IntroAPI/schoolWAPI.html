@@ -21,7 +21,10 @@
 
   <!--THE SCRIPT-->
   <script type="text/javascript">
+    const theClass = []
+
     $("button").click( () => {
+      //create the students in the class
       for(let i=0; i<15; i++) {
         createStudent();
       }
@@ -70,7 +73,16 @@
           JSON.stringify(response);
 
           //Set the name
-          student.name = response.results[0].name.first.concat(" ", response.results[0].name.last);
+
+          //Get and capitalize the first name
+          let firstName = response.results[0].name.first;
+          firstName = firstName.charAt(0).toUpperCase()+firstName.substr(1);
+
+          //Get and capitalize the last name
+          let lastName = response.results[0].name.last;
+          lastName = lastName.charAt(0).toUpperCase()+lastName.substr(1);
+
+          student.name = firstName.concat(" ", lastName);
 
           //Set the age
           const today = new Date();
@@ -105,14 +117,18 @@
           //Look up the GPA
           student.GPA = lookupGPA(student.avgGrade);
 
+          //Add the student to the class list
+          theClass.push(student);
+
           //Display things on the screen
-          console.log("This is my student")
-          console.log(response);
+          //console.log("This is my student")
+          //console.log(response);
+          console.log(theClass);
 
           $("div#classlist").append(`<h3>STUDENT: ${student.name}, Age: ${student.age}</h3>`)
 
           $("div#classlist").append(`<img src="${response.results[0].picture.thumbnail}" style="float:left"><table>
-            <tr><td><strong>Homeworks</strong>: ${student.homework}</td>
+            <tr><td width = "300px"><strong>Homeworks</strong>: ${student.homework}</td>
             <td><strong>Exams</strong>: ${student.exams}</td></tr>
             <tr><td><strong>Average grade</strong>: ${student.avgGrade}</td>
             <td><strong>GPA</strong>: ${student.GPA} (${student.letterGrade})</td></tr>
